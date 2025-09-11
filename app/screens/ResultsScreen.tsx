@@ -5,7 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSession } from '../contexts/SessionContext';
 import ContractTermsList from '../components/ContractTermsList';
-import { ArrowLeft, ArrowRight, FileText, CheckCircle, AlertCircle } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight } from 'lucide-react-native';
 
 interface ResultsScreenProps {
   onBack: () => void;
@@ -84,70 +84,6 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ onBack }) => {
           }
         ]}
       >
-        {/* Compliance Summary Dashboard */}
-        <View style={styles.summaryCard}>
-          <View style={styles.complianceHeader}>
-            <View style={styles.complianceIconContainer}>
-              {complianceRate >= 80 ? (
-                <CheckCircle size={24} color="#10b981" />
-              ) : complianceRate >= 60 ? (
-                <AlertCircle size={24} color="#f59e0b" />
-              ) : (
-                <AlertCircle size={24} color="#ef4444" />
-              )}
-            </View>
-            <View style={styles.complianceInfo}>
-              <Text style={styles.complianceStatus}>
-                {complianceRate >= 80 ? 'High Compliance' : 
-                 complianceRate >= 60 ? 'Moderate Compliance' : 
-                 'Low Compliance'}
-              </Text>
-              <Text style={styles.compliancePercentage}>{complianceRate}%</Text>
-            </View>
-          </View>
-          
-          <Text style={styles.termsAnalyzed}>
-            {totalTerms} total terms analyzed
-          </Text>
-          
-          <Text style={styles.complianceDescription}>
-            {complianceRate >= 60 ? 'Some terms need attention' : 'Multiple issues require review'}
-          </Text>
-
-          {/* Compliance Stats */}
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <View style={[styles.statIndicator, { backgroundColor: '#10b981' }]} />
-              <Text style={styles.statNumber}>{compliantTerms}</Text>
-              <Text style={styles.statLabel}>COMPLIANT</Text>
-            </View>
-            
-            <View style={styles.statItem}>
-              <View style={[styles.statIndicator, { backgroundColor: '#ef4444' }]} />
-              <Text style={styles.statNumber}>{totalTerms - compliantTerms}</Text>
-              <Text style={styles.statLabel}>NON-COMPLIANT</Text>
-            </View>
-          </View>
-
-          {/* Overall Compliance Progress Bar */}
-          <View style={styles.progressSection}>
-            <Text style={styles.progressLabel}>Overall Compliance</Text>
-            <View style={styles.progressBarContainer}>
-              <View 
-                style={[
-                  styles.progressBar,
-                  {
-                    width: `${complianceRate}%`,
-                    backgroundColor: complianceRate >= 80 ? '#10b981' : 
-                                   complianceRate >= 60 ? '#f59e0b' : '#ef4444'
-                  }
-                ]} 
-              />
-            </View>
-            <Text style={styles.progressPercentage}>📈 {complianceRate}%</Text>
-          </View>
-        </View>
-
         <ContractTermsList />
       </Animated.View>
     </SafeAreaView>
