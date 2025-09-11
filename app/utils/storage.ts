@@ -423,7 +423,7 @@ export const storeOfflineAnalysis = async (
       localPdfPath: cachedPdfPath,
       originalFilename: sessionData.original_filename || 'Unknown Contract',
       summary: generateAnalysisSummary(sessionData),
-      complianceScore: sessionData.compliance_percentage || 0,
+      complianceScore: calculateComplianceScore(sessionData),
       flags: generateFlags(sessionData),
       analysisDate: sessionData.analysis_timestamp || new Date().toISOString(),
       termsCount: sessionData.analysis_results?.length || 0,
@@ -448,6 +448,29 @@ export const storeOfflineAnalysis = async (
   }
 };
 
+// Calculate compliance score from analysis results
+const calculateComplianceScore = (sessionData: SessionDetailsApiResponse): number => {
+  // If API already provides compliance_percentage, use it
+  if (typeof sessionData.compliance_percentage === 'number') {
+    return sessionData.compliance_percentage;
+  }
+
+  // Otherwise, calculate from analysis_results
+  const results = sessionData.analysis_results || [];
+  if (results.length === 0) {
+    return 0;
+  }
+
+  const compliantCount = results.filter(term => {
+    // Use the same logic as ResultsScreen and SessionContext
+    return term.expert_override_is_valid_sharia ?? 
+           (term.isUserConfirmed ? (term.isReviewedSuggestionValid ?? true) : term.is_valid_sharia) ?? 
+           false;
+  }).length;
+
+  return Math.round((compliantCount / results.length) * 100);
+};
+
 // Generate analysis summary
 const generateAnalysisSummary = (sessionData: SessionDetailsApiResponse): string => {
   if (!sessionData) {
@@ -456,7 +479,7 @@ const generateAnalysisSummary = (sessionData: SessionDetailsApiResponse): string
 
   const results = sessionData.analysis_results || [];
   const issuesCount = results.filter(term => !term.is_valid_sharia).length;
-  const complianceScore = sessionData.compliance_percentage || 0;
+  const complianceScore = calculateComplianceScore(sessionData);
 
   if (issuesCount === 0) {
     return `Contract is Sharia compliant (${complianceScore}% compliance). No issues found.`;
@@ -475,7 +498,7 @@ const generateFlags = (sessionData: SessionDetailsApiResponse): string[] => {
   const flags: string[] = [];
   const results = sessionData.analysis_results || [];
   const issuesCount = results.filter(term => !term.is_valid_sharia).length;
-  const complianceScore = sessionData.compliance_percentage || 0;
+  const complianceScore = calculateComplianceScore(sessionData);
 
   if (complianceScore < 70) {
     flags.push('Low Compliance');

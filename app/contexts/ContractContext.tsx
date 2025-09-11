@@ -14,6 +14,7 @@ import BackgroundTaskManager from '../services/BackgroundTaskManager';
 import { notificationsService } from '../services/NotificationsService';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import { useSession } from './SessionContext';
+import { useLanguage } from './LanguageContext';
 
 interface ContractContextType {
   contracts: LocalContract[];
@@ -36,6 +37,7 @@ const ContractContext = createContext<ContractContextType | undefined>(undefined
 
 export const ContractProvider = ({ children }: { children: ReactNode }) => {
   const { setIsAnalyzingContract } = useSession();
+  const { t } = useLanguage();
   const [contracts, setContracts] = useState<LocalContract[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -191,7 +193,9 @@ export const ContractProvider = ({ children }: { children: ReactNode }) => {
         console.log('📱 Sending completion notification for completed contract');
         await notificationsService.scheduleContractProcessedNotification(
           contract.name,
-          contract.sessionId
+          contract.sessionId,
+          t('notifications.analysisComplete'),
+          t('notifications.contractReady')
         );
       }
     } catch (error) {
@@ -247,7 +251,9 @@ export const ContractProvider = ({ children }: { children: ReactNode }) => {
         // Send completion notification
         await notificationsService.scheduleContractProcessedNotification(
           updatedContract.name,
-          updatedContract.sessionId
+          updatedContract.sessionId,
+          t('notifications.analysisComplete'),
+          t('notifications.contractReady')
         );
         
         console.log('🚀 Analysis completion handled - navigation should now be unlocked');

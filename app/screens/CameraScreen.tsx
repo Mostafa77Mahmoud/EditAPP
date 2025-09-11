@@ -4,7 +4,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
+
   Alert,
   Platform,
   Image,
@@ -22,6 +22,7 @@ import { Button } from '../components/ui/button';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import { ScreenType } from '../MobileApp';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 
@@ -228,7 +229,7 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onUpload, onNavigate }) => 
 
   if (!permission.granted) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
         <View style={styles.permissionContainer}>
           <Text style={styles.permissionText}>{t('camera.permissionDenied')}</Text>
           <Button onPress={requestPermission} style={styles.permissionButton}>
@@ -241,7 +242,7 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onUpload, onNavigate }) => 
 
   if (showPreview && capturedImages.length > 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
         <View style={[styles.header, { paddingTop: isRTL ? 15 : 0 }]}>
           <Text style={styles.title}>
             {t('camera.preview')} ({capturedImages.length} {t('camera.pages')})
@@ -340,7 +341,7 @@ const getStyles = (isDark: boolean, isRTL: boolean) => RNStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: isDark ? '#000' : '#fff',
-    paddingTop: Platform.OS === 'ios' ? 44 : 30, // Safe area for status bar and notch
+    // SafeAreaView handles padding automatically
   },
   message: {
     flex: 1,

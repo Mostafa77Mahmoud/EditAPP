@@ -56,7 +56,7 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ onBack }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#1a1a1a' : '#ffffff' }]} edges={['top', 'left', 'right']}>
-      <View style={styles.safeTopSpace} />
+
       <Animated.View 
         style={[
           styles.header,

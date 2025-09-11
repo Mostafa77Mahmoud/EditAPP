@@ -126,7 +126,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
   const currentStepData = steps[currentStep];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={onComplete} style={styles.skipButton}>
           <Text style={styles.skipText}>{t('onboarding.skip')}</Text>
@@ -225,7 +225,7 @@ const getStyles = (isDark: boolean, isRTL: boolean) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: isDark ? '#0a0a0a' : '#ffffff',
-    paddingTop: Platform.OS === 'ios' ? 44 : 30, // Safe area for status bar and notch
+    // SafeAreaView handles padding automatically
   },
   header: {
     alignItems: isRTL ? 'flex-start' : 'flex-end',

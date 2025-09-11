@@ -163,10 +163,15 @@ class NotificationsService {
   }
 
   // Convenience methods for common notification types
-  async scheduleContractProcessedNotification(contractName: string, sessionId: string): Promise<void> {
+  async scheduleContractProcessedNotification(
+    contractName: string, 
+    sessionId: string,
+    translatedTitle?: string,
+    translatedBody?: string
+  ): Promise<void> {
     await this.scheduleLocalNotification({
-      title: 'notifications.analysisComplete',
-      body: 'notifications.contractReady',
+      title: translatedTitle || 'Analysis Complete',
+      body: translatedBody || 'Your contract is ready for review',
       data: { 
         type: 'contract_processed', 
         sessionId,
@@ -238,8 +243,13 @@ export const initNotifications = async (): Promise<boolean> => {
 // Convenience functions for use throughout the app
 export const scheduleLocalNotification = (options: LocalNotificationOptions) =>
   notificationsService.scheduleLocalNotification(options);
-export const scheduleContractProcessed = (contractName: string, sessionId: string) =>
-  notificationsService.scheduleContractProcessedNotification(contractName, sessionId);
+export const scheduleContractProcessed = (
+  contractName: string, 
+  sessionId: string, 
+  translatedTitle?: string, 
+  translatedBody?: string
+) =>
+  notificationsService.scheduleContractProcessedNotification(contractName, sessionId, translatedTitle, translatedBody);
 export const scheduleOrderStatus = (status: string, orderId: string) =>
   notificationsService.scheduleOrderStatusNotification(status, orderId);
 
