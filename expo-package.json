@@ -1,0 +1,41 @@
+{
+  "name": "shariaa-analyzer-expo",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "start:web": "expo start --web",
+    "start:ios": "expo start --ios",
+    "start:android": "expo start --android",
+    "build:ios": "expo build:ios",
+    "build:android": "expo build:android",
+    "build:web": "expo build:web"
+  },
+  "dependencies": {
+    "expo": "~50.0.0",
+    "expo-router": "~3.4.0",
+    "expo-camera": "~14.1.0",
+    "expo-image-picker": "~14.7.0",
+    "expo-document-picker": "~11.10.0",
+    "expo-file-system": "~16.0.0",
+    "expo-constants": "~15.4.0",
+    "expo-status-bar": "~1.11.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "react": "18.2.0",
+    "react-native": "0.74.2",
+    "react-native-safe-area-context": "4.8.2",
+    "react-native-screens": "~3.29.0",
+    "react-native-gesture-handler": "~2.14.0",
+    "react-native-reanimated": "~3.6.0",
+    "@react-native-async-storage/async-storage": "1.21.0",
+    "react-native-svg": "14.1.0",
+    "nativewind": "^2.0.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "@types/react": "~18.2.45",
+    "babel-preset-expo": "~10.0.0",
+    "typescript": "^5.1.3"
+  }
+}
