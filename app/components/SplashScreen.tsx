@@ -9,6 +9,47 @@ interface SplashScreenProps {
   onFinish: () => void;
 }
 
+interface LoadingDotProps {
+  delay: number;
+}
+
+const LoadingDot: React.FC<LoadingDotProps> = ({ delay }) => {
+  const dotAnim = useRef(new Animated.Value(0.6)).current;
+
+  useEffect(() => {
+    const startAnimation = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(dotAnim, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.timing(dotAnim, {
+            toValue: 0.6,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    const timer = setTimeout(startAnimation, delay);
+    return () => clearTimeout(timer);
+  }, [dotAnim, delay]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.dot,
+        {
+          opacity: dotAnim,
+        },
+      ]}
+    />
+  );
+};
+
 export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.3)).current;
@@ -147,9 +188,9 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
           },
         ]}
       >
-        <View style={[styles.dot, { animationDelay: '0ms' }]} />
-        <View style={[styles.dot, { animationDelay: '200ms' }]} />
-        <View style={[styles.dot, { animationDelay: '400ms' }]} />
+        <LoadingDot delay={0} />
+        <LoadingDot delay={200} />
+        <LoadingDot delay={400} />
       </Animated.View>
     </View>
   );
