@@ -231,7 +231,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
           styles.container,
           { backgroundColor: isDark ? "#111827" : "#f9fafb" },
         ]}
-        edges={['top', 'left', 'right']}
+        edges={['top', 'left', 'right', 'bottom']}
       >
         <StatusBar
           barStyle={isDark ? "light-content" : "dark-content"}

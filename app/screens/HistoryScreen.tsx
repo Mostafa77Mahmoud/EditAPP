@@ -436,7 +436,7 @@ const HistoryScreen: React.FC<HistoryScreenProps> = ({ onNavigate, onBack }) => 
   const isDark = theme === 'dark';
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor }]} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor }]} edges={['top', 'left', 'right', 'bottom']}>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
         backgroundColor={isDark ? colors.gray900 : colors.background}

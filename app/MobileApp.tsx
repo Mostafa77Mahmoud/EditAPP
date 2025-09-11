@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   StatusBar,
-  SafeAreaView,
+
   Alert,
   StyleSheet,
   Animated,
@@ -13,6 +13,7 @@ import { useTheme } from "./contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLanguage } from "./contexts/LanguageContext";
 import { useAuth } from "./contexts/AuthContext";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSession } from "./contexts/SessionContext";
 import { AnalysisProgressCard } from './components/AnalysisProgressCard';
 import ProcessingService from './services/ProcessingService';
@@ -506,7 +507,7 @@ const MobileApp: React.FC = () => {
   const statusBarStyle = theme === "dark" ? "light-content" : "dark-content";
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor }]} edges={['top', 'left', 'right', 'bottom']}>
       <StatusBar
         barStyle={statusBarStyle}
         backgroundColor={backgroundColor}
