@@ -65,45 +65,45 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
     // Keep the native splash screen visible while we prepare the custom one
     SplashScreen.preventAutoHideAsync();
 
-    // Start the animation sequence
+    // Start the animation sequence immediately with faster initial display
     const animationSequence = Animated.sequence([
       // First: Logo appears with dramatic scale and rotation
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
+          duration: 600,
+          useNativeDriver: false, // Use JS driver for web compatibility
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
           friction: 8,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(logoRotateAnim, {
           toValue: 1,
-          duration: 1200,
-          useNativeDriver: true,
+          duration: 800,
+          useNativeDriver: false,
         }),
       ]),
       // Then: Text slides up and glows
       Animated.parallel([
         Animated.timing(textFadeAnim, {
           toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
+          duration: 500,
+          useNativeDriver: false,
         }),
         Animated.spring(slideUpAnim, {
           toValue: 0,
           tension: 80,
           friction: 8,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         // Sparkle effect
         Animated.timing(sparkleAnim, {
           toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
+          duration: 600,
+          useNativeDriver: false,
         }),
       ]),
     ]);
@@ -114,12 +114,12 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(pulseAnim, {
           toValue: 1.05,
           duration: 1500,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(pulseAnim, {
           toValue: 1,
           duration: 1500,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ])
     );
@@ -130,29 +130,30 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(glowAnim, {
           toValue: 1,
           duration: 2000,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(glowAnim, {
           toValue: 0.3,
           duration: 2000,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ])
     );
 
+    // Start animations immediately
     animationSequence.start();
     
-    // Start continuous animations after initial sequence
+    // Start continuous animations after shorter delay
     setTimeout(() => {
       pulseAnimation.start();
       glowAnimation.start();
-    }, 1500);
+    }, 800);
 
-    // Hide splash screen after animation
+    // Hide splash screen after shorter duration for faster app loading
     const timer = setTimeout(async () => {
       await SplashScreen.hideAsync();
       onFinish();
-    }, 3500);
+    }, 2500);
 
     return () => {
       clearTimeout(timer);
@@ -260,6 +261,7 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
           <Image
             source={require('../../assets/icon.png')}
             style={styles.logo}
+            tintColor="#0f766e"
             resizeMode="contain"
           />
         </View>
@@ -393,16 +395,12 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderWidth: 4,
     borderColor: '#10b981',
-    shadowColor: '#10b981',
-    shadowOffset: { width: 0, height: 20 },
-    shadowOpacity: 0.8,
-    shadowRadius: 40,
+    boxShadow: '0 20px 40px rgba(16, 185, 129, 0.8)',
     elevation: 25,
   },
   logo: {
     width: '75%',
     height: '75%',
-    tintColor: '#0f766e',
   },
   textContainer: {
     alignItems: 'center',
@@ -415,9 +413,7 @@ const styles = StyleSheet.create({
     letterSpacing: 4,
     textAlign: 'center',
     marginBottom: 8,
-    textShadowColor: 'rgba(16, 185, 129, 0.8)',
-    textShadowOffset: { width: 0, height: 4 },
-    textShadowRadius: 20,
+    textShadow: '0 4px 20px rgba(16, 185, 129, 0.8)',
   },
   tagline: {
     fontSize: 20,
@@ -426,9 +422,7 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textAlign: 'center',
     marginBottom: 8,
-    textShadowColor: 'rgba(16, 185, 129, 0.4)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 8,
+    textShadow: '0 2px 8px rgba(16, 185, 129, 0.4)',
   },
   subtitle: {
     fontSize: 14,
