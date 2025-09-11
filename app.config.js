@@ -37,6 +37,9 @@ export default {
       favicon: "./assets/icon.png",
       bundler: "metro",
     },
+    experiments: {
+      tsconfigPaths: true,
+    },
     plugins: [
       [
         "expo-asset"
