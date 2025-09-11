@@ -462,9 +462,9 @@ const calculateComplianceScore = (sessionData: SessionDetailsApiResponse): numbe
   }
 
   const compliantCount = results.filter(term => {
-    // Use the same logic as ResultsScreen and SessionContext
+    // Calculate compliance using actual API properties
     return term.expert_override_is_valid_sharia ?? 
-           (term.isUserConfirmed ? (term.isReviewedSuggestionValid ?? true) : term.is_valid_sharia) ?? 
+           (term.is_confirmed_by_user ? true : term.is_valid_sharia) ?? 
            false;
   }).length;
 
