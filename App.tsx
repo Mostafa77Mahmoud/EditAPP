@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, TouchableOpacity } from "react-native";
 import MobileApp from "./app/MobileApp";
@@ -8,6 +8,7 @@ import { AuthProvider } from "./app/contexts/AuthContext";
 import { SessionProvider } from "./app/contexts/SessionContext";
 import { ContractProvider } from "./app/contexts/ContractContext";
 import { ErrorBoundary } from "./app/components/ErrorBoundary";
+import { CustomSplashScreen } from "./app/components/SplashScreen";
 
 const LoadingFallback = () => (
   <View
@@ -63,6 +64,12 @@ const ErrorFallback = ({
 );
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <CustomSplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <ThemeProvider>
