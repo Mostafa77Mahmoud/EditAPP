@@ -54,12 +54,10 @@ const LoadingDot: React.FC<LoadingDotProps> = ({ delay }) => {
 export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.1)).current;
-  const logoRotateAnim = useRef(new Animated.Value(0)).current;
   const textFadeAnim = useRef(new Animated.Value(0)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const slideUpAnim = useRef(new Animated.Value(50)).current;
-  const sparkleAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // Keep the native splash screen visible while we prepare the custom one
@@ -67,43 +65,32 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
 
     // Start the animation sequence immediately with faster initial display
     const animationSequence = Animated.sequence([
-      // First: Logo appears with dramatic scale and rotation
+      // First: Logo appears with scale animation only
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 600,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
           friction: 8,
-          useNativeDriver: Platform.OS !== 'web',
-        }),
-        Animated.timing(logoRotateAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
       ]),
-      // Then: Text slides up and glows
+      // Then: Text slides up
       Animated.parallel([
         Animated.timing(textFadeAnim, {
           toValue: 1,
           duration: 500,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
         Animated.spring(slideUpAnim, {
           toValue: 0,
           tension: 80,
           friction: 8,
-          useNativeDriver: Platform.OS !== 'web',
-        }),
-        // Sparkle effect
-        Animated.timing(sparkleAnim, {
-          toValue: 1,
-          duration: 600,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
       ]),
     ]);
@@ -114,12 +101,12 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(pulseAnim, {
           toValue: 1.05,
           duration: 1500,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
         Animated.timing(pulseAnim, {
           toValue: 1,
           duration: 1500,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
       ])
     );
@@ -130,12 +117,12 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(glowAnim, {
           toValue: 1,
           duration: 2000,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
         Animated.timing(glowAnim, {
           toValue: 0.3,
           duration: 2000,
-          useNativeDriver: Platform.OS !== 'web',
+          useNativeDriver: true,
         }),
       ])
     );
@@ -160,21 +147,11 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
       pulseAnimation.stop();
       glowAnimation.stop();
     };
-  }, [fadeAnim, scaleAnim, logoRotateAnim, textFadeAnim, glowAnim, pulseAnim, slideUpAnim, sparkleAnim, onFinish]);
-
-  const rotate = logoRotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  }, [fadeAnim, scaleAnim, textFadeAnim, glowAnim, pulseAnim, slideUpAnim, onFinish]);
 
   const glowOpacity = glowAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0.2, 0.8],
-  });
-
-  const sparkleScale = sparkleAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 1.2, 1],
   });
 
   return (
@@ -209,42 +186,7 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         ]}
       />
       
-      {/* Sparkle effects around logo */}
-      <Animated.View
-        style={[
-          styles.sparkle1,
-          {
-            opacity: sparkleAnim,
-            transform: [{ scale: sparkleScale }],
-          },
-        ]}
-      />
-      <Animated.View
-        style={[
-          styles.sparkle2,
-          {
-            opacity: sparkleAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 0.8],
-            }),
-            transform: [{ scale: sparkleScale }],
-          },
-        ]}
-      />
-      <Animated.View
-        style={[
-          styles.sparkle3,
-          {
-            opacity: sparkleAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 0.6],
-            }),
-            transform: [{ scale: sparkleScale }],
-          },
-        ]}
-      />
-      
-      {/* Main logo container with enhanced styling */}
+      {/* Main logo container with native-only styling */}
       <Animated.View
         style={[
           styles.logoContainer,
@@ -252,7 +194,6 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
             opacity: fadeAnim,
             transform: [
               { scale: Animated.multiply(scaleAnim, pulseAnim) },
-              { rotate: rotate },
             ],
           },
         ]}
@@ -297,7 +238,7 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         <LoadingDot delay={600} />
       </Animated.View>
 
-      {/* Progress bar effect */}
+      {/* Simple progress indicator */}
       <Animated.View
         style={[
           styles.progressContainer,
@@ -306,17 +247,7 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
           },
         ]}
       >
-        <Animated.View
-          style={[
-            styles.progressBar,
-            {
-              width: sparkleAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0%', '100%'],
-              }),
-            },
-          ]}
-        />
+        <View style={styles.progressBar} />
       </Animated.View>
     </View>
   );
@@ -354,33 +285,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#059669',
     opacity: 0.1,
   },
-  sparkle1: {
-    position: 'absolute',
-    top: height * 0.25,
-    right: width * 0.2,
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#10b981',
-  },
-  sparkle2: {
-    position: 'absolute',
-    top: height * 0.35,
-    left: width * 0.15,
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#34d399',
-  },
-  sparkle3: {
-    position: 'absolute',
-    top: height * 0.6,
-    right: width * 0.25,
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: '#6ee7b7',
-  },
+  
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -395,15 +300,11 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderWidth: 4,
     borderColor: '#10b981',
-    ...(Platform.OS === 'web' ? {
-      boxShadow: '0 20px 40px rgba(16, 185, 129, 0.8)',
-    } : {
-      shadowColor: '#10b981',
-      shadowOffset: { width: 0, height: 20 },
-      shadowOpacity: 0.8,
-      shadowRadius: 40,
-      elevation: 25,
-    }),
+    shadowColor: '#10b981',
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.8,
+    shadowRadius: 40,
+    elevation: 25,
   },
   logo: {
     width: '75%',
@@ -420,13 +321,9 @@ const styles = StyleSheet.create({
     letterSpacing: 4,
     textAlign: 'center',
     marginBottom: 8,
-    ...(Platform.OS === 'web' ? {
-      textShadow: '0 4px 20px rgba(16, 185, 129, 0.8)',
-    } : {
-      textShadowColor: 'rgba(16, 185, 129, 0.8)',
-      textShadowOffset: { width: 0, height: 4 },
-      textShadowRadius: 20,
-    }),
+    textShadowColor: 'rgba(16, 185, 129, 0.8)',
+    textShadowOffset: { width: 0, height: 4 },
+    textShadowRadius: 20,
   },
   tagline: {
     fontSize: 20,
@@ -435,13 +332,9 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textAlign: 'center',
     marginBottom: 8,
-    ...(Platform.OS === 'web' ? {
-      textShadow: '0 2px 8px rgba(16, 185, 129, 0.4)',
-    } : {
-      textShadowColor: 'rgba(16, 185, 129, 0.4)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 8,
-    }),
+    textShadowColor: 'rgba(16, 185, 129, 0.4)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
   },
   subtitle: {
     fontSize: 14,
@@ -476,6 +369,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: '100%',
+    width: '100%',
     backgroundColor: '#10b981',
     borderRadius: 1.5,
   },
