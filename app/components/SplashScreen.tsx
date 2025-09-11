@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 40%, rgba(0, 0, 0, 0.3) 100%)',
+    backgroundColor: 'rgba(16, 185, 129, 0.03)',
   },
   glowEffect: {
     position: 'absolute',
