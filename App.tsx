@@ -66,6 +66,7 @@ const ErrorFallback = ({
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
 
+  // Ensure splash screen is immediately visible
   if (showSplash) {
     return <CustomSplashScreen onFinish={() => setShowSplash(false)} />;
   }

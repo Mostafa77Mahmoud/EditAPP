@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
-import { View, Image, StyleSheet, Animated, Dimensions, Text } from 'react-native';
+import { View, Image, StyleSheet, Animated, Dimensions, Text, Platform } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 
 const { width, height } = Dimensions.get('window');
@@ -23,12 +23,12 @@ const LoadingDot: React.FC<LoadingDotProps> = ({ delay }) => {
           Animated.timing(dotAnim, {
             toValue: 1,
             duration: 800,
-            useNativeDriver: true,
+            useNativeDriver: Platform.OS !== 'web',
           }),
           Animated.timing(dotAnim, {
             toValue: 0.3,
             duration: 800,
-            useNativeDriver: true,
+            useNativeDriver: Platform.OS !== 'web',
           }),
         ])
       ).start();
@@ -72,18 +72,18 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 600,
-          useNativeDriver: false, // Use JS driver for web compatibility
+          useNativeDriver: Platform.OS !== 'web',
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
           friction: 8,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
         Animated.timing(logoRotateAnim, {
           toValue: 1,
           duration: 800,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
       ]),
       // Then: Text slides up and glows
@@ -91,19 +91,19 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(textFadeAnim, {
           toValue: 1,
           duration: 500,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
         Animated.spring(slideUpAnim, {
           toValue: 0,
           tension: 80,
           friction: 8,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
         // Sparkle effect
         Animated.timing(sparkleAnim, {
           toValue: 1,
           duration: 600,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
       ]),
     ]);
@@ -114,12 +114,12 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(pulseAnim, {
           toValue: 1.05,
           duration: 1500,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
         Animated.timing(pulseAnim, {
           toValue: 1,
           duration: 1500,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
       ])
     );
@@ -130,12 +130,12 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
         Animated.timing(glowAnim, {
           toValue: 1,
           duration: 2000,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
         Animated.timing(glowAnim, {
           toValue: 0.3,
           duration: 2000,
-          useNativeDriver: false,
+          useNativeDriver: Platform.OS !== 'web',
         }),
       ])
     );
@@ -149,11 +149,11 @@ export const CustomSplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) =>
       glowAnimation.start();
     }, 800);
 
-    // Hide splash screen after shorter duration for faster app loading
+    // Hide splash screen after optimized duration for immediate app opening
     const timer = setTimeout(async () => {
       await SplashScreen.hideAsync();
       onFinish();
-    }, 2500);
+    }, 1800); // Reduced from 2500ms to 1800ms for faster loading
 
     return () => {
       clearTimeout(timer);
@@ -395,8 +395,15 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderWidth: 4,
     borderColor: '#10b981',
-    boxShadow: '0 20px 40px rgba(16, 185, 129, 0.8)',
-    elevation: 25,
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0 20px 40px rgba(16, 185, 129, 0.8)',
+    } : {
+      shadowColor: '#10b981',
+      shadowOffset: { width: 0, height: 20 },
+      shadowOpacity: 0.8,
+      shadowRadius: 40,
+      elevation: 25,
+    }),
   },
   logo: {
     width: '75%',
@@ -413,7 +420,13 @@ const styles = StyleSheet.create({
     letterSpacing: 4,
     textAlign: 'center',
     marginBottom: 8,
-    textShadow: '0 4px 20px rgba(16, 185, 129, 0.8)',
+    ...(Platform.OS === 'web' ? {
+      textShadow: '0 4px 20px rgba(16, 185, 129, 0.8)',
+    } : {
+      textShadowColor: 'rgba(16, 185, 129, 0.8)',
+      textShadowOffset: { width: 0, height: 4 },
+      textShadowRadius: 20,
+    }),
   },
   tagline: {
     fontSize: 20,
@@ -422,7 +435,13 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textAlign: 'center',
     marginBottom: 8,
-    textShadow: '0 2px 8px rgba(16, 185, 129, 0.4)',
+    ...(Platform.OS === 'web' ? {
+      textShadow: '0 2px 8px rgba(16, 185, 129, 0.4)',
+    } : {
+      textShadowColor: 'rgba(16, 185, 129, 0.4)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 8,
+    }),
   },
   subtitle: {
     fontSize: 14,
