@@ -55,7 +55,7 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ onBack }) => {
   const complianceRate = totalTerms > 0 ? Math.round((compliantTerms / totalTerms) * 100) : 0;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#1a1a1a' : '#ffffff' }]} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#1a1a1a' : '#ffffff' }]} edges={['top', 'left', 'right', 'bottom']}>
 
       <Animated.View 
         style={[
@@ -84,6 +84,70 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ onBack }) => {
           }
         ]}
       >
+        {/* Compliance Summary Dashboard */}
+        <View style={styles.summaryCard}>
+          <View style={styles.complianceHeader}>
+            <View style={styles.complianceIconContainer}>
+              {complianceRate >= 80 ? (
+                <CheckCircle size={24} color="#10b981" />
+              ) : complianceRate >= 60 ? (
+                <AlertCircle size={24} color="#f59e0b" />
+              ) : (
+                <AlertCircle size={24} color="#ef4444" />
+              )}
+            </View>
+            <View style={styles.complianceInfo}>
+              <Text style={styles.complianceStatus}>
+                {complianceRate >= 80 ? 'High Compliance' : 
+                 complianceRate >= 60 ? 'Moderate Compliance' : 
+                 'Low Compliance'}
+              </Text>
+              <Text style={styles.compliancePercentage}>{complianceRate}%</Text>
+            </View>
+          </View>
+          
+          <Text style={styles.termsAnalyzed}>
+            {totalTerms} total terms analyzed
+          </Text>
+          
+          <Text style={styles.complianceDescription}>
+            {complianceRate >= 60 ? 'Some terms need attention' : 'Multiple issues require review'}
+          </Text>
+
+          {/* Compliance Stats */}
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <View style={[styles.statIndicator, { backgroundColor: '#10b981' }]} />
+              <Text style={styles.statNumber}>{compliantTerms}</Text>
+              <Text style={styles.statLabel}>COMPLIANT</Text>
+            </View>
+            
+            <View style={styles.statItem}>
+              <View style={[styles.statIndicator, { backgroundColor: '#ef4444' }]} />
+              <Text style={styles.statNumber}>{totalTerms - compliantTerms}</Text>
+              <Text style={styles.statLabel}>NON-COMPLIANT</Text>
+            </View>
+          </View>
+
+          {/* Overall Compliance Progress Bar */}
+          <View style={styles.progressSection}>
+            <Text style={styles.progressLabel}>Overall Compliance</Text>
+            <View style={styles.progressBarContainer}>
+              <View 
+                style={[
+                  styles.progressBar,
+                  {
+                    width: `${complianceRate}%`,
+                    backgroundColor: complianceRate >= 80 ? '#10b981' : 
+                                   complianceRate >= 60 ? '#f59e0b' : '#ef4444'
+                  }
+                ]} 
+              />
+            </View>
+            <Text style={styles.progressPercentage}>📈 {complianceRate}%</Text>
+          </View>
+        </View>
+
         <ContractTermsList />
       </Animated.View>
     </SafeAreaView>
@@ -181,6 +245,90 @@ const getStyles = (isDark: boolean, isRTL: boolean) => StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  complianceHeader: {
+    flexDirection: isRTL ? 'row-reverse' : 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  complianceIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: isDark ? '#065f46' : '#ecfdf5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: isRTL ? 0 : 12,
+    marginLeft: isRTL ? 12 : 0,
+  },
+  complianceInfo: {
+    flex: 1,
+  },
+  complianceStatus: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: isDark ? '#f9fafb' : '#111827',
+    marginBottom: 4,
+  },
+  termsAnalyzed: {
+    fontSize: 14,
+    color: isDark ? '#9ca3af' : '#6b7280',
+    marginBottom: 8,
+  },
+  complianceDescription: {
+    fontSize: 14,
+    color: isDark ? '#d1d5db' : '#374151',
+    marginBottom: 20,
+  },
+  statsContainer: {
+    flexDirection: isRTL ? 'row-reverse' : 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  statItem: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  statIndicator: {
+    width: 4,
+    height: 20,
+    borderRadius: 2,
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: isDark ? '#f9fafb' : '#111827',
+  },
+  statLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: isDark ? '#9ca3af' : '#6b7280',
+    textAlign: 'center',
+  },
+  progressSection: {
+    gap: 8,
+  },
+  progressLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: isDark ? '#d1d5db' : '#374151',
+    marginBottom: 8,
+  },
+  progressBarContainer: {
+    height: 8,
+    backgroundColor: isDark ? '#374151' : '#e5e7eb',
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  progressBar: {
+    height: '100%',
+    borderRadius: 4,
+  },
+  progressPercentage: {
+    fontSize: 12,
+    color: isDark ? '#9ca3af' : '#6b7280',
+    textAlign: isRTL ? 'left' : 'right',
   },
 });
 

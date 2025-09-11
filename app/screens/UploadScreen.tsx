@@ -438,12 +438,12 @@ const UploadScreen: React.FC<UploadScreenProps> = ({
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f9fafb' }]} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f9fafb' }]} edges={['top', 'left', 'right', 'bottom']}>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
         backgroundColor={isDark ? '#111827' : '#f9fafb'}
       />
-      <View style={styles.safeTopSpace} />
+
 
       <View style={styles.header}>
         <TouchableOpacity 
